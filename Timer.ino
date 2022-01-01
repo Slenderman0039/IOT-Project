@@ -12,8 +12,8 @@
 
 WiFiServer server(80);
 
-const char* ssid = "Vodafone-F";
-const char* password = "famigliacama2020";
+const char* ssid = "iPhone";
+const char* password = "IoT2021";
 
 int startTimer = 0; //SALVA L'INIZIO DEL TIMER PER IL RIAVVIO
 int timer = 0; //TEMPO COUNTDOWN
