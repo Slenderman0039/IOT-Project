@@ -13,12 +13,10 @@
 
 WiFiServer server(80);
 
-const char* ssid = "iPhone";
-const char* password = "IoT2021_2022";
+const char* ssid = "Vodafone-F";
+const char* password = "famigliacama2020";
 
 int startTimer = 0; //SALVA L'INIZIO DEL TIMER PER IL RIAVVIO
-int timer = 0; //TEMPO COUNTDOWN
-bool flag = false; //FLAG ATTIVAZIONE COUNTDOWN
 
 void setPin(){ //ISTANZIO I PIN DEL DISPLAY
     pinMode(BUTTON, INPUT);
@@ -44,7 +42,7 @@ void setup() {
     Serial.print(".");
   }
   Serial.println("");
-  Serial.print("Connected to ");
+  Serial.print("Connesso a ");
   Serial.println(ssid);
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
@@ -54,21 +52,20 @@ void setup() {
 const long timeoutTime = 2000;
 String header;
 void loop() {
-
-  //Il client rimane in ascolto di nuovi client:
-  WiFiClient client = server.available();   // Rimane in ascolto
-  //Controlliamo se un nuovo client si registra
-  if (client) {                             
+  //Il server rimane in ascolto di nuovi client:
+  WiFiClient client = server.available();   // viene restituito un client che è connesso e che ha informazioni disponibili per essere lette
+  //Controlliamo se un nuovo client si registra e se deve inviare pacchetti
+  if (client) {           
     Serial.println("Nuovo client registrato!");          // stampiamo il messaggio di avvenuta registrazione
     String currentLine = "";                // Dati che trasmette il client (il pacchetto inizialmente è vuoto)
     unsigned long currentTime = millis();   
     unsigned long previousTime = currentTime;
-    while (client.connected() && currentTime - previousTime <= timeoutTime) { // loop che verifica fino a quando il client è connesso
+    while (client.connected() && currentTime - previousTime <= timeoutTime) { // loop che verifica fino a quando il client è connesso 
       currentTime = millis();         
-      if (client.available()) {             // Controlla se ci sono bytes che il client sta inviando
-        char c = client.read();             // se è true, ci sono dei bytes e legge i bytes ricevuti
+      if (client.available()) {             // Verifichiamo se ci sono dei bytes disponibili per essere letti
+        char c = client.read();             // Legge il byte successivo ricevuto dal server a cui è connesso il client
         header += c;
-        if (c == '\n') {                    // se i bytes contengono uno \n, automaticamente va su una nuova line
+        if (c == '\n') {                    // se il byte è uguale a \n
           if (currentLine.length() == 0) {
             client.println("HTTP/1.1 200 OK");      //viene costruito il pacchetto HTTP di risposta
             client.println("Content-type:text/html");
@@ -81,7 +78,9 @@ void loop() {
             index.trim(); //SE TOLGO GLI SPAZI VUOTI, LA LUNGHEZZA NON SARA' MAI COME QUELLA DELLA HOMEPAGE
             String count = header.substring(10,17); //ESTRAGGO IL VALORE DEL PARAMETRO COUNT (SE CONTENUTO NELL'URL)
             String timer = header.substring(0,11);  //ESTRAGGO /TIMER SE E' CONTENUTO NELL'URL
+            Serial.println(timer);
             timer.trim(); //TOLGO GLI SPAZI DALLO /TIMER
+            Serial.println(timer);
             Serial.println("");
             Serial.println(header);   //stampo il pacchetto
             Serial.println("");
@@ -111,7 +110,7 @@ void loop() {
             client.println("</html>");
             break;
           } else {  
-            currentLine = "";
+            currentLine = ""; //CREA UNO SPAZIO PER IL PROSSIMO PACCHETTO
           }
         } else if (c != '\r') {   //SE I BYTES NON CONTENGONO /r , AGGIUNGE ALLA CURRENT LINE TUTTI I BYTES  
           currentLine += c;      
@@ -334,6 +333,5 @@ void setTimer(int value,WiFiClient client){ //FUNZIONE CHE GESTISCE IL TIMER VIR
       }
     client.print("<script>function onrestart(){window.location.reload(); document.getElementById('countdown').innerHTML = 'Riavvio in corso...';}</script>"); //SE CLICCA SUL RIAVVIO VIRTUALE, APPARE LA SCRITTA 'RIAVVIO IN CORSO' E RICARICA LA PAGINA
     }
-    flag = false;
     client.println("</body>");
 }
