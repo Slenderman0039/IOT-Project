@@ -2,7 +2,7 @@
 Esp32 Timer con WebServer
 
 __Project type:__ Internet of Things <br>
-__For:__ *University of Palermo* <br>
+__For:__ *University of Palermo* - Computer engineering<br>
 __Developed in (period):__ 2021 - 2022 <br>
 __Credits:__ *Alessandro Macaluso, Alessandro Picone, Giuseppe Sanfilippo* <br>
 
@@ -15,7 +15,7 @@ scadere del timer bisogna avvisare l’utente con un segnale acustico.
 ```
 
 ### Hardware
->Scheda: Esp32 (Cambiare le librerie se si sta utilizzando Esp8266) <br>
+>Scheda: Esp32 <br>
 >Sensori: Pulsante <br>
 >Attuatori: display 7 segmenti, buzzer <br>
 
