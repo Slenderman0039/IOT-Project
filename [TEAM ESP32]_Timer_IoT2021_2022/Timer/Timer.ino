@@ -16,8 +16,8 @@
 
 WiFiServer server(80);
 
-const char* ssid = "Vodafone-F";
-const char* password = "famigliacama2020";
+const char* ssid = "";
+const char* password = "";
 
 int freq = 2000;
 int channel = 0;
